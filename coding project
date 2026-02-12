@@ -1,27 +1,35 @@
-const int trigPin = 7;
-const int echoPin = 6;
+// פינים של חיישן אולטרסוני
+const int trigPin = 7;   // פין שליחת פולס
+const int echoPin = 6;   // פין קבלת ההחזר
 
-// RGB pins
-const int redPin = 9;
-const int greenPin = 10;
-const int bluePin = 11;
+// פינים של נורת RGB
+const int redPin = 9;    // אדום
+const int greenPin = 10; // ירוק
+const int bluePin = 11;  // כחול
 
-long duration;
-long x;
-float distance;
+// משתנים למדידה
+long duration;   // משך הזמן של הפולס החוזר
+long x;          // ערך של המרחק (שלם)
+float distance;  // המרחק בסנטימטרים
 
 void setup() {
+  // הגדרת כיווני הפינים של החיישן
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
+  // הגדרת פיני ה־RGB כפלט
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
 
+  // ודא שה־trig כבוי בהתחלה
   digitalWrite(trigPin, LOW);
+
+  // פתיחת תקשורת סריאלית
   Serial.begin(9600);
 }
 
+// פונקציה שמכבה את כל הצבעים ב־RGB
 void ledOff() {
   analogWrite(redPin, 0);
   analogWrite(greenPin, 0);
@@ -29,43 +37,5 @@ void ledOff() {
 }
 
 void loop() {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  duration = pulseIn(echoPin, HIGH, 30000);
-
-  if (duration == 0) {
-    Serial.println("אין החזר");
-    ledOff();
-    delay(100);
-    return;
-  }
-
-  distance = duration * 0.0343 / 2;
-  x = distance;
-
-  Serial.print("מרחק: ");
-  Serial.print(distance);
-  Serial.println(" ס\"מ");
-
-  if (distance <= 10) {
-    analogWrite(redPin, 0);
-    analogWrite(greenPin, 0);
-    analogWrite(bluePin, x);
-  }
-  else if (distance <= 30) {
-    analogWrite(redPin, 0);
-    analogWrite(greenPin, 0);
-    analogWrite(bluePin, x);
-  }
-  else {
-    analogWrite(redPin, 0);
-    analogWrite(greenPin, 0);
-    analogWrite(bluePin, x);
-  }
-
-  delay(100);
-}
+  // שליחת פולס אולטרסוני קצר
+  digitalWrite(trigPin, LO
