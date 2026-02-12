@@ -1,0 +1,71 @@
+const int trigPin = 7;
+const int echoPin = 6;
+
+// RGB pins
+const int redPin = 9;
+const int greenPin = 10;
+const int bluePin = 11;
+
+long duration;
+long x;
+float distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+
+  digitalWrite(trigPin, LOW);
+  Serial.begin(9600);
+}
+
+void ledOff() {
+  analogWrite(redPin, 0);
+  analogWrite(greenPin, 0);
+  analogWrite(bluePin, 0);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH, 30000);
+
+  if (duration == 0) {
+    Serial.println("אין החזר");
+    ledOff();
+    delay(100);
+    return;
+  }
+
+  distance = duration * 0.0343 / 2;
+  x = distance;
+
+  Serial.print("מרחק: ");
+  Serial.print(distance);
+  Serial.println(" ס\"מ");
+
+  if (distance <= 10) {
+    analogWrite(redPin, 0);
+    analogWrite(greenPin, 0);
+    analogWrite(bluePin, x);
+  }
+  else if (distance <= 30) {
+    analogWrite(redPin, 0);
+    analogWrite(greenPin, 0);
+    analogWrite(bluePin, x);
+  }
+  else {
+    analogWrite(redPin, 0);
+    analogWrite(greenPin, 0);
+    analogWrite(bluePin, x);
+  }
+
+  delay(100);
+}
